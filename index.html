@@ -3,6 +3,7 @@
 
 <head>
     
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -20,13 +21,6 @@
 	<div id="canvasesdiv" style="position:relative; display:block; margin:auto; width:600px; height:520px"></div>
     <canvas id="myCanvas" style="display: block; position: absolute; margin: 0 auto;display: block;
         position: absolute; margin: 0 auto; top: 0; bottom: 0; left: 0; right: 0;" width="600" height="520"></canvas>
-            <div id="buttons">
-      <input type="button" id="play" value="Play" onclick="play()">
-      <input type="button" id="pause" value="Pause" onclick="pause()">
-      <input type="button" id="stepforward" value="Step >>" onclick="stepForward()">
-      <input type="button" id="reset" value="Reset" onclick="reset()">
-    </div>
-
     <div id="morebuttons">
       <input type="button" id="showbutton" value="Show net force arrows" onclick="showNetForce = 1; drawMotion();">
       <input type="button" id="hidebutton" value="Hide net force arrows" onclick="showNetForce = 0; drawMotion();">
@@ -75,76 +69,13 @@
 
       }
 
-      function initializeValues() {
-        charge1X = 300-1.5*40;
-        charge1Y = yBase+20;
-        charge2X = 300+1.5*40;
-        charge2Y = yBase+20;
-        charge3X = 300;
-        charge3Y = yBase-80;
-        charge4X = 310;
-        charge4Y = yBase-20;
-        showNetForce = 1;
-        charge1Vx = 0.2*Math.random();
-        charge1Vy = -0.2*Math.random();
-        charge2Vx = -0.2*Math.random();
-        charge2Vy = -0.2*Math.random();
-        charge3Vx = -0.1 + 0.2*Math.random();
-        charge3Vy = 0.1*Math.random();
-        charge4Vx = -0.1 + 0.2*Math.random();
-        charge4Vy = -0.1 + 0.2*Math.random();
-
-        Q1 = 3;
-        Q2 = 4;
-        Q3 = 2;
-        Q4 = 4;
-        ran1 = Math.random();
-        ran2 = Math.random();
-        ran3 = Math.random();
-        tempQ;
-        if (ran1 > ran2) {
-          tempQ = Q1;
-          Q1 = Q2;
-          Q2 = tempQ;
-        }
-        if (ran1 > ran3) {
-          tempQ = Q1;
-          Q1 = Q3;
-         Q3 = tempQ;
-        }
-         if ((ran2 > ran3) && (Q2 < Q3)) {
-          tempQ = Q2;
-          Q2 = Q3;
-          Q3 = tempQ;
-        }
-         if ((ran2 > ran1) && (Q2 < Q1)) {
-          tempQ = Q2;
-          Q2 = Q1;
-          Q1 = tempQ;
-        }
-        if (Math.random() < 0.5) Q1 = -Q1;
-        if (Math.random() < 0.5) Q2 = -Q2;
-        if (Math.random() < 0.5) Q3 = -Q3;
-        if (Math.random() < 0.5) Q4 = -Q4;
-
-        q1sliderValue = Q1;
-        q2sliderValue = Q2;
-        q3sliderValue = Q3;
-        q4sliderValue = Q4;
-        q1sliderX = q1sliderXMin+(q1sliderXMax-q1sliderXMin)*(Q1-q1sliderValueMin)/(q1sliderValueMax-q1sliderValueMin);
-        q2sliderX = q2sliderXMin+(q2sliderXMax-q2sliderXMin)*(Q2-q2sliderValueMin)/(q2sliderValueMax-q2sliderValueMin);
-        q3sliderX = q3sliderXMin+(q3sliderXMax-q3sliderXMin)*(Q3-q3sliderValueMin)/(q3sliderValueMax-q3sliderValueMin);
-        q4sliderX = q4sliderXMin+(q4sliderXMax-q4sliderXMin)*(Q4-q4sliderValueMin)/(q4sliderValueMax-q4sliderValueMin);
-      }
-
 
       function reset() {
         window.clearTimeout(timer);
-        initializeValues();
         index = -1;
         time = 0.0;
         runFlag = 1;
-        drawMotion();
+        runMotion();
 
       }
 
@@ -161,32 +92,22 @@
       var check2 = document.getElementById("check2");
       var check3 = document.getElementById("check3");
       var check4 = document.getElementById("check4");
-      var index = -1;
+      var index = 0;
       var xBase = 50;
       var yBase = 200;
       var radius = 14;
       var runFlag = 1;
       var time = 0.0;
       var timer;
-      var charge1X = 300-1.5*40;
-      var charge1Y = yBase+20;
-      var charge2X = 300+1.5*40;
-      var charge2Y = yBase+20;
+      var charge1X = 300-3*40;
+      var charge1Y = yBase+40;
+      var charge2X = 300+3*40;
+      var charge2Y = yBase+40;
       var charge3X = 300;
-      var charge3Y = yBase-80;
-      var charge4X = 310;
-      var charge4Y = yBase-20;
+      var charge3Y = yBase-140;
+      var charge4X = 580;
+      var charge4Y = 340;
       var showNetForce = 1;
-      var charge1Vx = 0.2*Math.random();
-      var charge1Vy = -0.2*Math.random();
-      var charge2Vx = -0.2*Math.random();
-      var charge2Vy = -0.2*Math.random();
-      var charge3Vx = -0.1 + 0.2*Math.random();
-      var charge3Vy = 0.1*Math.random();
-      var charge4Vx = -0.1 + 0.2*Math.random();
-      var charge4Vy = -0.1 + 0.2*Math.random();
-      var dt = 0.005;
-
 
       var sensorX = xBase+240;
       var sensorY = yBase - 20;
@@ -204,15 +125,15 @@
       var alreadyGuessedFlag = 0;
 
       var potential = 0;
-      var k = -8000;
+      var k = -40000;
       var rSq = 0;
       var xPos = 0;
       var yPos = 0;
       var vectorColor = 'black';
       var Q1 = 3;
       var Q2 = 4;
-      var Q3 = 2;
-      var Q4 = 4;
+      var Q3 = 5;
+      var Q4 = 0;
       var ran1 = Math.random();
       var ran2 = Math.random();
       var ran3 = Math.random();
@@ -240,13 +161,11 @@
       if (Math.random() < 0.5) Q1 = -Q1;
       if (Math.random() < 0.5) Q2 = -Q2;
       if (Math.random() < 0.5) Q3 = -Q3;
-      if (Math.random() < 0.5) Q4 = -Q4;
       var guessQ1 = 0;
       var guessQ2 = 0;
       var chargeColor = "red";
       var rightAnswer = 0;
       var wrongAnswer = 0;
-      var minrSq = 0.0;
 
  //     var q1sliderX = 300;
       var q1sliderY = 420;
@@ -313,41 +232,6 @@
       ray[4].y = charge4Y;
       ray[4].charge = Q4;
       ray[4].color = "#6a6";
-
-      var nTrailArray = 30000;
-      var trail1 = new Array(nTrailArray);
-        for (var i = 0; i < nTrailArray; i++) {
-         trail1[i] = {};
-         trail1[i].x = 0.0;
-         trail1[i].y = 0.0;
-        }
-      trail1[0].x = charge1X;
-      trail1[0].y = charge1Y;
-      var trail2 = new Array(nTrailArray);
-        for (var i = 0; i < nTrailArray; i++) {
-         trail2[i] = {};
-         trail2[i].x = 0.0;
-         trail2[i].y = 0.0;
-        }
-      trail2[0].x = charge2X;
-      trail2[0].y = charge2Y;
-      var trail3 = new Array(nTrailArray);
-        for (var i = 0; i < nTrailArray; i++) {
-         trail3[i] = {};
-         trail3[i].x = 0.0;
-         trail3[i].y = 0.0;
-        }
-      trail3[0].x = charge3X;
-      trail3[0].y = charge3Y;
-      var trail4 = new Array(nTrailArray);
-        for (var i = 0; i < nTrailArray; i++) {
-         trail4[i] = {};
-         trail4[i].x = 0.0;
-         trail4[i].y = 0.0;
-        }
-      trail4[0].x = charge4X;
-      trail4[0].y = charge4Y;
-
 
      drawMotion();
 
@@ -437,6 +321,28 @@
             }
 
 
+         // calculate the forces on each charge
+//           F1x = F1y = 0;
+//           F2x = F2y = 0;
+//           F3x = F3y = 0;
+//           rSq = (charge2X-charge1X)*(charge2X-charge1X) + (charge2Y-charge1Y)*(charge2Y-charge1Y);
+//           F1x = k*Q1*Q2*(charge2X-charge1X)/Math.pow(rSq,1.5);
+//           F1y = k*Q1*Q2*(charge1Y-charge2Y)/Math.pow(rSq,1.5);
+//           F2x = -F1x;
+//           F2y = -F1y;
+//           rSq = (charge3X-charge1X)*(charge3X-charge1X) + (charge3Y-charge1Y)*(charge3Y-charge1Y);
+//           F3x = k*Q1*Q3*(charge1X-charge3X)/Math.pow(rSq,1.5);
+//           F3y = k*Q1*Q3*(charge3Y-charge1Y)/Math.pow(rSq,1.5);
+//           F1x = F1x - F3x;
+//           F1y = F1y - F3y;
+//           rSq = (charge3X-charge2X)*(charge3X-charge2X) + (charge3Y-charge2Y)*(charge3Y-charge2Y);
+//           var tempX = k*Q2*Q3*(charge2X-charge3X)/Math.pow(rSq,1.5);
+//           var tempY = k*Q2*Q3*(charge3Y-charge2Y)/Math.pow(rSq,1.5);
+//           F3x = F3x + tempX;
+//           F3y = F3y + tempY;
+//           F2x = F2x - tempX;
+//           F2y = F2y - tempY;
+
 
          // new section to calculate the forces on charge 1
            rSq = (charge2X-charge1X)*(charge2X-charge1X) + (charge2Y-charge1Y)*(charge2Y-charge1Y);
@@ -444,19 +350,16 @@
            var F12y = k*Q1*Q2*(charge1Y-charge2Y)/Math.pow(rSq,1.5);
            var F21x = -F12x;
            var F21y = -F12y;
-           minrSq = rSq;
            rSq = (charge3X-charge1X)*(charge3X-charge1X) + (charge3Y-charge1Y)*(charge3Y-charge1Y);
            var F13x = k*Q1*Q3*(charge3X-charge1X)/Math.pow(rSq,1.5);
            var F13y = k*Q1*Q3*(charge1Y-charge3Y)/Math.pow(rSq,1.5);
            var F31x = -F13x;
            var F31y = -F13y;
-           if (rSq < minrSq) { minrSq = rSq; }
            rSq = (charge4X-charge1X)*(charge4X-charge1X) + (charge4Y-charge1Y)*(charge4Y-charge1Y);
            var F14x = k*Q1*Q4*(charge4X-charge1X)/Math.pow(rSq,1.5);
            var F14y = k*Q1*Q4*(charge1Y-charge4Y)/Math.pow(rSq,1.5);
            var F41x = -F14x;
            var F41y = -F14y;
-           if (rSq < minrSq) { minrSq = rSq; }
            if (check1.checked) {
              drawArrow(F12x,F12y,charge1X,charge1Y,ray[2].color)
              drawArrow(F13x,F13y,charge1X,charge1Y,ray[3].color)
@@ -469,15 +372,11 @@
            var F23y = k*Q3*Q2*(charge2Y-charge3Y)/Math.pow(rSq,1.5);
            var F32x = -F23x;
            var F32y = -F23y;
-           if (rSq < minrSq) { minrSq = rSq; }
-
            rSq = (charge4X-charge2X)*(charge4X-charge2X) + (charge4Y-charge2Y)*(charge4Y-charge2Y);
            var F24x = k*Q2*Q4*(charge4X-charge2X)/Math.pow(rSq,1.5);
            var F24y = k*Q2*Q4*(charge2Y-charge4Y)/Math.pow(rSq,1.5);
            var F42x = -F24x;
            var F42y = -F24y;
-           if (rSq < minrSq) { minrSq = rSq; }
-
            if (check2.checked) {
              drawArrow(F21x,F21y,charge2X,charge2Y,ray[1].color)
              drawArrow(F23x,F23y,charge2X,charge2Y,ray[3].color)
@@ -490,14 +389,6 @@
            var F34y = k*Q3*Q4*(charge3Y-charge4Y)/Math.pow(rSq,1.5);
            var F43x = -F34x;
            var F43y = -F34y;
-           if (rSq < minrSq) { minrSq = rSq; }
-           if (minrSq < 10) {
-            dt = 0.0005;
-           }
-           else {
-            dt = 0.005;
-           }
-
            if (check3.checked) {
              drawArrow(F31x,F31y,charge3X,charge3Y,ray[1].color)
              drawArrow(F32x,F32y,charge3X,charge3Y,ray[2].color)
@@ -537,18 +428,6 @@
            context.fillStyle = chargeColor;
            context.strokeStyle = chargeColor;
 
-  //         console.log(index + " " + trail1[index].x + " " + trail1[index].y);
-
-           context.beginPath();           
-           context.moveTo(trail1[0].x, trail1[0].y);
-
-           for (var i=1; i<= index; i++) {
-            context.lineTo(trail1[i].x,trail1[i].y);
-//            console.log(i);
-           }
-           context.lineWidth = 2;
-           context.stroke();
-
            context.beginPath();
            context.arc(charge1X, charge1Y, radius, 0, 2 * Math.PI, false);
            context.fill();
@@ -560,16 +439,6 @@
            chargeColor = ray[2].color;
            context.fillStyle = chargeColor;
            context.strokeStyle = chargeColor;
-
-           context.beginPath();           
-           context.moveTo(trail2[0].x, trail2[0].y);
-
-           for (var i=1; i<= index; i++) {
-            context.lineTo(trail2[i].x,trail2[i].y);
-//            console.log(i);
-           }
-           context.lineWidth = 2;
-           context.stroke();
 
            context.beginPath();
            context.arc(charge2X, charge2Y, radius, 0, 2 * Math.PI, false);
@@ -583,16 +452,6 @@
            context.fillStyle = chargeColor;
            context.strokeStyle = chargeColor;
 
-           context.beginPath();           
-           context.moveTo(trail3[0].x, trail3[0].y);
-
-           for (var i=1; i<= index; i++) {
-            context.lineTo(trail3[i].x,trail3[i].y);
-//            console.log(i);
-           }
-           context.lineWidth = 2;
-           context.stroke();
-
            context.beginPath();
            context.arc(charge3X, charge3Y, radius, 0, 2 * Math.PI, false);
            context.fill();
@@ -604,16 +463,6 @@
            chargeColor = ray[4].color;
            context.fillStyle = chargeColor;
            context.strokeStyle = chargeColor;
-
-           context.beginPath();           
-           context.moveTo(trail4[0].x, trail4[0].y);
-
-           for (var i=1; i<= index; i++) {
-            context.lineTo(trail4[i].x,trail4[i].y);
-//            console.log(i);
-           }
-           context.lineWidth = 2;
-           context.stroke();
 
            context.beginPath();
            context.arc(charge4X, charge4Y, radius, 0, 2 * Math.PI, false);
@@ -628,38 +477,26 @@
            context.fillText("2", charge2X, charge2Y);
            context.fillText("3", charge3X, charge3Y);
            context.fillText("4", charge4X, charge4Y);
+//           context.fillText("Correct Answers", 120, 50);
+//           context.fillText("Incorrect Answers", 480, 50);
 
-//  move the charges
-           charge1Vx = charge1Vx + F1x * dt;
-           charge1Vy = charge1Vy + F1y * dt;
-           charge1X = charge1X + charge1Vx * dt;
-           charge1Y = charge1Y - charge1Vy * dt;
- 
-           charge2Vx = charge2Vx + F2x * dt;
-           charge2Vy = charge2Vy + F2y * dt;
-           charge2X = charge2X + charge2Vx * dt;
-           charge2Y = charge2Y - charge2Vy * dt;
+//           var correctLabel = rightAnswer.toFixed(0);
+//           context.textAlign = 'left';
+//           context.fillText(correctLabel, 120, 70);
 
-           charge3Vx = charge3Vx + F3x * dt;
-           charge3Vy = charge3Vy + F3y * dt;
-           charge3X = charge3X + charge3Vx * dt;
-           charge3Y = charge3Y - charge3Vy * dt;
+//           var incorrectLabel = wrongAnswer.toFixed(0);
+//           context.textAlign = 'left';
+//           context.fillText(incorrectLabel, 480, 70);
 
-           charge4Vx = charge4Vx + F4x * dt;
-           charge4Vy = charge4Vy + F4y * dt;
-           charge4X = charge4X + charge4Vx * dt;
-           charge4Y = charge4Y - charge4Vy * dt;
 
-           trail1[index+1].x = charge1X;
-           trail1[index+1].y = charge1Y;
-           trail2[index+1].x = charge2X;
-           trail2[index+1].y = charge2Y;
-           trail3[index+1].x = charge3X;
-           trail3[index+1].y = charge3Y;
-           trail4[index+1].x = charge4X;
-           trail4[index+1].y = charge4Y;
 
-   //        console.log(index + index + " " + trail1[index+1].x + " " + trail1[index+1].y);
+//           context.fillStyle = 'blue';
+//           context.textAlign = 'center';
+//           context.fillText("Drag the red arrow to measure field and potential", xBase+250, yBase+235);
+
+//           context.fillStyle = '#a3a';
+//           context.textAlign = 'center';
+//           context.fillText(feedbackMessage, xBase+250, yBase+200);
 
 
 
@@ -669,7 +506,7 @@
     function runMotion() {
         drawMotion();
         if (runFlag == 1) {
-          timer = window.setTimeout(runMotion, 20/60);
+          timer = window.setTimeout(runMotion, 2000/60);
         }
       }
 
@@ -1058,17 +895,20 @@ function myTouchEnd(event){
 
 
   </script>
-<p>This is like the previous simulation, but this one shows the time evolution of the system. You can get some very interesting
-patterns, especially if you set the sliders so that two of the particles have a positive charge and two have a negative charge.
-What are some things that you notice? If two of the particles get into a death spiral, what can you change to get them out?</p>
+<p>In this simulation, you can explore the force between charged particles. You can drag the particles
+around the screen to change their positions. If you only want two or three of them, just set the charge on
+one or two of the particles to zero.</p>
 
-<p>Note that the simulation slows down by a factor of 10 when two particles get very close together. Even then, the physics may not be exactly right - it's hard to handle infinities well!</p>
+<p>You can display (or not) an arrow representing the net force being applied to each particle.
+You can also use the checkboxes to display the individual forces being applied to the particles by the
+other particles.</p>
 
-<p>Simulation written by Andrew Duffy, and first posted on 4-25-2018. </p>
+<p>Simulation written by Andrew Duffy, and first posted on 2-4-2018. Inspired by Jennifer Snyder., posted by Angela Padilla </p>
 
 
   <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" rel="dct:type">work</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Andrew Duffy</span> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.<br />This simulation can be found in the collection at <a xmlns:dct="http://purl.org/dc/terms/" href="http://physics.bu.edu/~duffy/classroom.html" rel="dct:source">http://physics.bu.edu/~duffy/classroom.html</a>.
-
+  
+          
 
 </body>
 </html>
